@@ -1,2 +1,2 @@
-# ViRF-R1
-Official repository of ’ViRF-R1: Visual Reinforcement Fine-tuning in Large Vision Language Models’
+# ViRFT-R1
+Official repository of ’ViRFT-R1: Visual Reinforcement Fine-tuning in Large Vision Language Models’
