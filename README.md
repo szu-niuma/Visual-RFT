@@ -42,9 +42,9 @@ Visual preference alignment involves training Large Vision-Language Models (LVLM
 </a>
 
 ## 📢 News
-- 🚀 [11/04/2024] We release our dataset.
-- 🚀 [10/24/2024] We upload our paper to arxiv.
-- 🚀 [10/25/2024] We release ViRFT repository and multi-tasks training code.
+- 🚀 [02/25/2025] We release our paper.
+- 🚀 [02/25/2025] We upload our training datasets to <a href="https://huggingface.co/collections/laolao77/virft-datasets-67bc271b6f2833eccc0651df">Huggingface</a></h3>.
+- 🚀 [02/25/2025] We release **ViRFT** repository and our training code.
 
 ## 💡 Highlights
 - 🔥 **Multi-Image Visual Alignment Pipeline**: We first design a multi-image visual alignment pipeline MIA-DPO. Our MIA-DPO requires no manual annotations and does not rely on APIs from larger models, offering a significant cost advantage compared to existing visual alignment approaches. 
