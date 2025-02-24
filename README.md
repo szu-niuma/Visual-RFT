@@ -59,3 +59,12 @@ Visual preference alignment involves training Large Vision-Language Models (LVLM
 <a href="">
   <img src="assets/framework.png" alt="Logo" >
 </a>
+
+## 🛠️ Usage
+### Setup
+```
+git clone https://github.com/Liuziyu77/ViRFT.git
+conda create -n ViRFT python=3.10
+conda activate ViRFT
+bash setup.sh
+```
