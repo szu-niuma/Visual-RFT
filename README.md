@@ -36,3 +36,15 @@ Visual preference alignment involves training Large Vision-Language Models (LVLM
       <img src="assets/teaser.png" alt="Logo" width="100%"> 
     </a>
 <br>
+
+<a href="">
+  <img src="assets/radar.png" alt="Logo" >
+</a>
+
+<a href="">
+  <img src="assets/teaser.png" alt="Logo" >
+</a>
+
+<a href="">
+  <img src="assets/framework.png" alt="Logo" >
+</a>
