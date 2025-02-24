@@ -43,7 +43,7 @@ Visual preference alignment involves training Large Vision-Language Models (LVLM
 
 ## 📢 News
 - 🚀 [02/25/2025] We release our paper.
-- 🚀 [02/25/2025] We upload our training datasets to <a href="https://huggingface.co/collections/laolao77/virft-datasets-67bc271b6f2833eccc0651df">Huggingface</a></h3>.
+- 🚀 [02/25/2025] We upload our training datasets to <a href="https://huggingface.co/collections/laolao77/virft-datasets-67bc271b6f2833eccc0651df">Huggingface</a>.
 - 🚀 [02/25/2025] We release **ViRFT** repository and our training code.
 
 ## 💡 Highlights
@@ -60,11 +60,39 @@ Visual preference alignment involves training Large Vision-Language Models (LVLM
   <img src="assets/framework.png" alt="Logo" >
 </a>
 
-## 🛠️ Usage
-### Setup
+## 🛠️ Setup
 ```
 git clone https://github.com/Liuziyu77/ViRFT.git
 conda create -n ViRFT python=3.10
 conda activate ViRFT
 bash setup.sh
 ```
+## Training
+### Datasets
+To train on our various visual perception tasks, first visit <a href="https://huggingface.co/collections/laolao77/virft-datasets-67bc271b6f2833eccc0651df">Huggingface Datasets</a> to download the datasets. We have uploaded different datasets for different tasks.
+| Datasets             |Task  |Setting          | Description                                                                 |
+|------------------------------|------|----|-----------------------------------------------------------------------------|
+| laolao77/ViRFT_COCO   |Detection | -                 | It includes all categories from COCO, with a total of 6k entries.            |
+| laolao77/ViRFT_COCO_base65     | Detection |Open Vocabulary       | It includes 65 basic categories from COCO, with a total of 6k entries.      |
+| laolao77/ViRFT_COCO_8_cate_4_shot |  Detection| Few-shot | It includes 8 selected categories from COCO.                                 |
+| laolao77/ViRFT_LVIS_few_shot     |  Detection| Few-shot      | It includes 6 selected categories from COCO.                                 |
+| laolao77/ViRFT_CLS_flower_4_shot |  Classification| Few-shot     | It includes the 102 categories from the Flower102 dataset, with 4 images per category. |
+| laolao77/ViRFT_CLS_fgvc_aircraft_4_shot|  Classification| Few-shot | It includes the 100 categories from the FGVC-Aircraft dataset, with 4 images per category. |
+| laolao77/ViRFT_CLS_car196_4shot   |  Classification| Few-shot   | It includes the 196 categories from the Stanford Cars dataset, with 4 images per category. |
+| laolao77/ViRFT_CLS_pets37_4shot  |  Classification| Few-shot    | It includes the 37 categories from the Pets37 dataset, with 4 images per category. |
+| LISA dataset | Grounding | - | |
+### GRPO
+After downloading the dataset, you can start training using the following bash script.
+```
+
+
+```
+
+
+
+
+
+
+
+
+
