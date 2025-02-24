@@ -127,8 +127,13 @@ We use <a href="https://github.com/hiyouga/LLaMA-Factory">LLaMa-Factory</a> for 
 ## Evaluation
 We conducted extensive experiments on various visual perception tasks, including fine-grained image classification, open vocabulary object detection, few-shot object detection, and reasoning grounding. **ViRFT** achieves remarkable performance improvements across these tasks with minimal data and computational cost, significantly surpassing supervised fine-tuning baselines.
 
-
-
+The table below shows the test results of the model trained on the ViRFT_COCO_base65 dataset, evaluated on 15 new classes from the COCO dataset and 13 rare classes from the LVIS dataset.
+<a href="">
+  <img src="assets/coco_ov.png" alt="Logo" >
+</a>
+<a href="">
+  <img src="assets/lvis_ov.png" alt="Logo" >
+</a>
 
 
 
