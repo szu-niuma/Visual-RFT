@@ -144,10 +144,10 @@ Please note that some file paths and model paths in ```Qwen2_VL_coco_infere.py``
 ### line 166-167, change for your model path and model base
 model_path = "./share_models/Qwen2-VL-2B-Instruct/"
 ori_processor_path = "./share_models/Qwen2-VL-2B-Instruct/"
-### line 235-238, selecte the categories you want to evaluation
-selected_cate = ['bus', 'train', 'fire hydrant', 'stop sign', 'cat', 'dog', 'bed', 'toilet']
 ### line 181, change for your coco val annnotation path
 with open('./data/coco/annotations/instances_val2017.json', 'r') as json_file:
+### line 235-238, selecte the categories you want to evaluation
+selected_cate = ['bus', 'train', 'fire hydrant', 'stop sign', 'cat', 'dog', 'bed', 'toilet']
 ### line 384, results save path
 with open(f'prediction_Qwen2_vl_2B_baseline.json', 'w') as json_file:
 ```
@@ -166,10 +166,10 @@ Please note that some file paths and model paths in ```Qwen2_VL_lvis_infere.py``
 ### line 168-169, change for your model path and model base
 model_path = './share_models/Qwen2-VL-2B-Instruct_GRPO_coco_base65cate/'
 ori_processor_path = "./share_models/Qwen2-VL-2B-Instruct/"
-### line 239-242, selecte the categories you want to evaluation
-selected_cate = ['horse_buggy', 'die', 'kitchen_table', 'omelet', 'papaya', 'stepladder']
 ### line 184, change for your lvis val annnotation path
 with open('./data/lvis/annotations/lvis_v1_val.json', 'r') as json_file:
+### line 239-242, selecte the categories you want to evaluation
+selected_cate = ['horse_buggy', 'die', 'kitchen_table', 'omelet', 'papaya', 'stepladder']
 ### line 347, results save path
 with open(f'prediction_Qwen2_vl_2B_GRPO_coco_base65cate_lvis_ov.json', 'w') as json_file:
 ```
@@ -178,6 +178,17 @@ For ***evaluation***, just run ```./lvis_evaluation/lvis_evaluation.ipynb``` ste
 
 ### Classification Evaluation
 You can use the files in the ```classification``` directory for model inference and obtain evaluation results. Our code supports multi-GPU evaluation, and it requires at least two GPUs.
+```
+cd ./classification
+python Qwen2_VL_classification_infere.py
+```
+Please note that the model paths in ```Qwen2_VL_classification_infere.py``` need to be modified.
+```
+### line 61-63, change for your model path and model base
+model_path = "./share_models/Qwen2-VL-2B-Instruct_GRPO_aircraft100_16shot"
+ori_processor_path = "./share_models/Qwen2-VL-2B-Instruct/"
+```
+Inference and result computation are performed simultaneously. After the program finishes running, the number of correctly classified items will be displayed in the command line, and the accuracy is obtained by dividing it by the length of the validation set. (Flower102: 2463, Pets37: 3669, stanford cars: 8041, fgvc-aircraft: 3333)
 
 ### Evaluation Results
 The table below shows the test results of the model trained on the **ViRFT_COCO_base65** dataset, evaluated on 15 new classes from the COCO dataset and 13 rare classes from the LVIS dataset. *We have also conducted **additional experiments**; please refer to our paper for further details*.
