@@ -80,13 +80,59 @@ To train on our various visual perception tasks, first visit <a href="https://hu
 | laolao77/ViRFT_CLS_fgvc_aircraft_4_shot|  Classification| Few-shot | It includes the 100 categories from the FGVC-Aircraft dataset, with 4 images per category. |
 | laolao77/ViRFT_CLS_car196_4shot   |  Classification| Few-shot   | It includes the 196 categories from the Stanford Cars dataset, with 4 images per category. |
 | laolao77/ViRFT_CLS_pets37_4shot  |  Classification| Few-shot    | It includes the 37 categories from the Pets37 dataset, with 4 images per category. |
-| LISA dataset | Grounding | - | |
+| LISA dataset | Grounding | - | Reasoning Grounding|
 ### GRPO
-After downloading the dataset, you can start training using the following bash script.
+After downloading the dataset, you can start training using the following example bash script. Our bash scripts are in ```/src/scripts```
+```
+export DEBUG_MODE="true"
+export LOG_PATH="./debug_log_2b_GRPO_coco_base65cate_6k.txt"
+
+export DATA_PATH=./share_data/ViRFT_COCO_base65   ### your local dataset downloading from huggingface
+export CKPT_PATH=./share_models/Qwen2-VL-2B-Instruct    ### Qwen2-VL-2B checkpoint path
+export SAVE_PATH=./share_models/Qwen2-VL-2B-Instruct_GRPO_coco_base65cate_6k    ### save path
+
+torchrun --nproc_per_node="8" \
+    --nnodes="1" \
+    --node_rank="0" \
+    --master_addr="127.0.0.1" \
+    --master_port="12345" \
+    src/open_r1/grpo.py \
+    --output_dir ${SAVE_PATH}  \
+    --model_name_or_path ${CKPT_PATH} \
+    --dataset_name ${DATA_PATH} \
+    --deepspeed local_scripts/zero3.json \
+    --max_prompt_length 1024 \
+    --per_device_train_batch_size 1 \
+    --gradient_accumulation_steps 2 \
+    --logging_steps 1 \
+    --bf16 \
+    --report_to wandb \
+    --gradient_checkpointing false \
+    --attn_implementation flash_attention_2 \
+    --max_pixels 401408 \
+    --num_train_epochs 2 \
+    --run_name Qwen2-VL-2B_GRPO_coco_base65cate_6k \
+    --save_steps 100 \
+    --save_only_model true \
+    --num_generations 8 '
 ```
 
-
+It is important to note that if you encounter an OOM (Out of Memory) issue during training, you can resolve it by configuring `zero3.json`. For the 7B model, if the issue persists after enabling `zero3.json`, you can try lowering the `num_generations` to 4.
 ```
+--deepspeed ./local_scripts/zero3.json
+```
+### SFT
+We use <a href="https://github.com/hiyouga/LLaMA-Factory">LLaMa-Factory</a> for supervised fine-tuning (SFT) of the model. You can convert the downloaded dataset into the corresponding Qwen SFT format for training.
+
+## Evaluation
+We conducted extensive experiments on various visual perception tasks, including fine-grained image classification, open vocabulary object detection, few-shot object detection, and reasoning grounding. **ViRFT** achieves remarkable performance improvements across these tasks with minimal data and computational cost, significantly surpassing supervised fine-tuning baselines.
+
+
+
+
+
+
+
 
 
 
