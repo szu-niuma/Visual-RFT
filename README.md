@@ -56,6 +56,10 @@ Visual preference alignment involves training Large Vision-Language Models (LVLM
   <img src="assets/teaser.png" alt="Logo" >
 </a>
 
+
+## Framework
+**ViRFT** framework is shown below. The policy model generates a group of responses based on the input. Each response is passed through a verifiable reward function to compute the reward. After group computation of the rewards for each output, the quality of each response is evaluated and used to update the policy model. To ensure the stability of the policy model training, **ViRFT** use KL divergence to limit the difference between the policy model and the reference model. For ***more implementation details***, including data generation, the design of the ***verifiable reward***, and other aspects, please refer to our paper.
+
 <a href="">
   <img src="assets/framework.png" alt="Logo" >
 </a>
@@ -125,9 +129,31 @@ It is important to note that if you encounter an OOM (Out of Memory) issue durin
 We use <a href="https://github.com/hiyouga/LLaMA-Factory">LLaMa-Factory</a> for supervised fine-tuning (SFT) of the model. You can convert the downloaded dataset into the corresponding Qwen SFT format for training.
 
 ## Evaluation
-We conducted extensive experiments on various visual perception tasks, including fine-grained image classification, open vocabulary object detection, few-shot object detection, and reasoning grounding. **ViRFT** achieves remarkable performance improvements across these tasks with minimal data and computational cost, significantly surpassing supervised fine-tuning baselines.
+We conducted extensive experiments on various visual perception tasks, including **fine-grained image classification**, **open vocabulary object detection**, **few-shot object detection**, and **reasoning grounding**. **ViRFT** achieves remarkable performance improvements across these tasks with minimal data and computational cost, significantly surpassing supervised fine-tuning baselines.
 
-The table below shows the test results of the model trained on the ViRFT_COCO_base65 dataset, evaluated on 15 new classes from the COCO dataset and 13 rare classes from the LVIS dataset.
+### COCO Evaluation
+You can use the files in the ```coco_evaluation``` directory for model inference and obtain evaluation results. Our code supports multi-GPU evaluation, and it requires at least two GPUs.
+For ***inference***: 
+```
+cd ./coco_evaluation
+python Qwen2_VL_coco_infere.py
+```
+For ***evaluation***, run ```./coco_evaluation/evaluation.ipynb``` step by step.
+
+### LVIS Evaluation
+You can use the files in the ```lvis_evaluation``` directory for model inference and obtain evaluation results. Our code supports multi-GPU evaluation, and it requires at least two GPUs.
+For ***inference***: 
+```
+cd ./lvis_evaluation
+python Qwen2_VL_lvis_infere.py
+```
+For ***evaluation***, run ```./lvis_evaluation/lvis_evaluation.ipynb``` step by step.
+
+### Classification Evaluation
+You can use the files in the ```classification``` directory for model inference and obtain evaluation results. Our code supports multi-GPU evaluation, and it requires at least two GPUs.
+
+### Evaluation Results
+The table below shows the test results of the model trained on the **ViRFT_COCO_base65** dataset, evaluated on 15 new classes from the COCO dataset and 13 rare classes from the LVIS dataset. *We have also conducted **additional experiments**; please refer to our paper for further details*.
 <a href="">
   <img src="assets/coco_ov.png" alt="Logo" >
 </a>
@@ -135,7 +161,15 @@ The table below shows the test results of the model trained on the ViRFT_COCO_ba
   <img src="assets/lvis_ov.png" alt="Logo" >
 </a>
 
-
+### Case Study
+In the following figure, we present some inference examples from **ViRFT**. We observe that the thinking process significantly enhances the reasoning and grounding ability with **ViRFT**. Through **ViRFT**, Qwen2-VL learns to think critically and carefully examine the image to produce accurate grounding results.
+<a href="">
+  <img src="assets/case_lisa.png" alt="Logo" >
+</a>
+We also present some inference cases of the model when handling *fine-grained classification tasks*. These results not demonstrate the strong generalization ability of **ViRFT** across various visual tasks.
+<a href="">
+  <img src="assets/case_cls.png" alt="Logo" >
+</a>
 
 
 
