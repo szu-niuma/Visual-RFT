@@ -133,21 +133,48 @@ We conducted extensive experiments on various visual perception tasks, including
 
 ### COCO Evaluation
 You can use the files in the ```coco_evaluation``` directory for model inference and obtain evaluation results. Our code supports multi-GPU evaluation, and it requires at least two GPUs.
+
 For ***inference***: 
 ```
 cd ./coco_evaluation
 python Qwen2_VL_coco_infere.py
 ```
-For ***evaluation***, run ```./coco_evaluation/evaluation.ipynb``` step by step.
+Please note that some file paths and model paths in ```Qwen2_VL_coco_infere.py``` need to be modified.
+```
+### line 166-167, change for your model path and model base
+model_path = "./share_models/Qwen2-VL-2B-Instruct/"
+ori_processor_path = "./share_models/Qwen2-VL-2B-Instruct/"
+### line 235-238, selecte the categories you want to evaluation
+selected_cate = ['bus', 'train', 'fire hydrant', 'stop sign', 'cat', 'dog', 'bed', 'toilet']
+### line 181, change for your coco val annnotation path
+with open('./data/coco/annotations/instances_val2017.json', 'r') as json_file:
+### line 384, results save path
+with open(f'prediction_Qwen2_vl_2B_baseline.json', 'w') as json_file:
+```
+For ***evaluation***, just run ```./coco_evaluation/evaluation.ipynb``` step by step.
 
 ### LVIS Evaluation
 You can use the files in the ```lvis_evaluation``` directory for model inference and obtain evaluation results. Our code supports multi-GPU evaluation, and it requires at least two GPUs.
+
 For ***inference***: 
 ```
 cd ./lvis_evaluation
 python Qwen2_VL_lvis_infere.py
 ```
-For ***evaluation***, run ```./lvis_evaluation/lvis_evaluation.ipynb``` step by step.
+Please note that some file paths and model paths in ```Qwen2_VL_lvis_infere.py``` need to be modified.
+```
+### line 168-169, change for your model path and model base
+model_path = './share_models/Qwen2-VL-2B-Instruct_GRPO_coco_base65cate/'
+ori_processor_path = "./share_models/Qwen2-VL-2B-Instruct/"
+### line 239-242, selecte the categories you want to evaluation
+selected_cate = ['horse_buggy', 'die', 'kitchen_table', 'omelet', 'papaya', 'stepladder']
+### line 184, change for your lvis val annnotation path
+with open('./data/lvis/annotations/lvis_v1_val.json', 'r') as json_file:
+### line 347, results save path
+with open(f'prediction_Qwen2_vl_2B_GRPO_coco_base65cate_lvis_ov.json', 'w') as json_file:
+```
+
+For ***evaluation***, just run ```./lvis_evaluation/lvis_evaluation.ipynb``` step by step.
 
 ### Classification Evaluation
 You can use the files in the ```classification``` directory for model inference and obtain evaluation results. Our code supports multi-GPU evaluation, and it requires at least two GPUs.
