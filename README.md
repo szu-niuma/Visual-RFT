@@ -41,6 +41,17 @@ Visual preference alignment involves training Large Vision-Language Models (LVLM
   <img src="assets/radar.png" alt="Logo" >
 </a>
 
+## 📢 News
+- 🚀 [11/04/2024] We release our dataset.
+- 🚀 [10/24/2024] We upload our paper to arxiv.
+- 🚀 [10/25/2024] We release ViRFT repository and multi-tasks training code.
+
+## 💡 Highlights
+- 🔥 **Multi-Image Visual Alignment Pipeline**: We first design a multi-image visual alignment pipeline MIA-DPO. Our MIA-DPO requires no manual annotations and does not rely on APIs from larger models, offering a significant cost advantage compared to existing visual alignment approaches. 
+- 🔥 **Observation on Multi-Image Hallucinations**: We contribute to the study of different types of multi-image hallucinations and propose to use attention values as an indicator for detecting multi-image hallucinations.
+- 🔥 **Excellent Performance**:  MIA-DPO is agnostic to different LVLM architectures (LLaVA-v1.5 and InternLM-XC2.5, boosts the performance on multiple multi-image benchmarks while maintaining the original single-image understanding capabilities.
+
+
 <a href="">
   <img src="assets/teaser.png" alt="Logo" >
 </a>
