@@ -131,6 +131,8 @@ We use <a href="https://github.com/hiyouga/LLaMA-Factory">LLaMa-Factory</a> for 
 ## Evaluation
 We conducted extensive experiments on various visual perception tasks, including **fine-grained image classification**, **open vocabulary object detection**, **few-shot object detection**, and **reasoning grounding**. **ViRFT** achieves remarkable performance improvements across these tasks with minimal data and computational cost, significantly surpassing supervised fine-tuning baselines.
 
+> We provide a step-by-step tutorial for using the evaluation code. If you encounter any issues, feel free to open an issue.
+
 ### COCO Evaluation
 You can use the files in the ```coco_evaluation``` directory for model inference and obtain evaluation results. Our code supports multi-GPU evaluation, and it requires at least two GPUs.
 
@@ -151,6 +153,8 @@ selected_cate = ['bus', 'train', 'fire hydrant', 'stop sign', 'cat', 'dog', 'bed
 ### line 384, results save path
 with open(f'prediction_Qwen2_vl_2B_baseline.json', 'w') as json_file:
 ```
+The inference results will be saved in `JSON` format and later used for evaluation.
+
 For ***evaluation***, just run ```./coco_evaluation/evaluation.ipynb``` step by step.
 
 ### LVIS Evaluation
@@ -173,6 +177,7 @@ selected_cate = ['horse_buggy', 'die', 'kitchen_table', 'omelet', 'papaya', 'ste
 ### line 347, results save path
 with open(f'prediction_Qwen2_vl_2B_GRPO_coco_base65cate_lvis_ov.json', 'w') as json_file:
 ```
+The inference results will be saved in `JSON` format and later used for evaluation.
 
 For ***evaluation***, just run ```./lvis_evaluation/lvis_evaluation.ipynb``` step by step.
 
