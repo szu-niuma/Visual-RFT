@@ -2,9 +2,9 @@
   <h1 align="center"><img src="assets/logo.png" width="256"></h1>
   <h1 align="center">ViRFT: Visual Reinforcement Fine-tuning in Large Vision Language Models</h1>
     <p align="center">
-    <a href="https://github.com/Liuziyu77"><strong>Ziyu Liu</strong></a>
+    <a href="https://github.com/Liuziyu77"><strong>Ziyu Liu*</strong></a>
     ·
-    <a href="https://github.com/Liuziyu77"><strong>Zeyi Sun</strong></a>
+    <a href="https://github.com/SunzeY"><strong>Zeyi Sun*</strong></a>
     ·
     <a href="https://yuhangzang.github.io/"><strong>Yuhang Zang</strong></a>
     ·
