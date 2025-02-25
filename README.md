@@ -28,9 +28,7 @@
 <div align="center"></div>
 <p align="center">
   <p>
-Visual preference alignment involves training Large Vision-Language Models (LVLMs) to predict human preferences between visual inputs. This is typically achieved by using labeled datasets of chosen/rejected pairs and employing optimization algorithms like direct preference optimization (DPO). Existing visual alignment methods, primarily designed for single-image scenarios, struggle to effectively handle the complexity of multi-image tasks due to the scarcity of diverse training data and the high cost of annotating chosen/rejected pairs. 
-    
-🌈We present Multi-Image Augmented Direct Preference Optimization (MIA-DPO), a visual preference alignment approach that effectively handles multi-image inputs. MIA-DPO mitigates the scarcity of diverse multi-image training data by extending single-image data with unrelated images arranged in grid collages or pic-in-pic formats, significantly reducing the costs associated with multi-image data annotations. Our observation reveals that attention values of LVLMs vary considerably across different images. We use attention values to identify and filter out rejected responses the model may have mistakenly focused on. Our attention-aware selection for constructing the chosen/rejected pairs without relying on (i) human annotation, (ii) extra data, and (iii) external models or APIs. MIA-DPO is compatible with various architectures and outperforms existing methods on five multi-image benchmarks, achieving an average performance boost of 3.0% on LLaVA-v1.5 and 4.3% on the recent InternLM-XC2.5. Moreover, MIA-DPO has a minimal effect on the model's ability to understand single images.  
+🌈We introduce <strong>Visual Reinforcement Fine-tuning (ViRFT)</strong>, the first comprehensive adaptation of <strong>Deepseek-R1's RL strategy</strong> to the <strong>multimodal field</strong>. We use the Qwen2-VL-2/7B model as our base model and design a <strong>rule-based verifiable reward</strong>, which is integrated into a <strong>GRPO-based reinforcement fine-tuning framework</strong> to enhance the performance of LVLMs across various visual perception tasks. <strong>ViRFT</strong> extends R1's reasoning capabilities to multiple visual perception tasks, including various detection tasks like <strong>Open Vocabulary Detection, Few-shot Detection, Reasoning Grounding, and Fine-grained Image Classification</strong>.
   </p>
 <!--     <a href="">
       <img src="assets/teaser.png" alt="Logo" width="100%"> 
@@ -42,14 +40,15 @@ Visual preference alignment involves training Large Vision-Language Models (LVLM
 </a>
 
 ## 📢 News
-- 🚀 [02/25/2025] We release our paper.
+- 🚀 [02/26/2025] We release our paper.
 - 🚀 [02/25/2025] We upload our training datasets to <a href="https://huggingface.co/collections/laolao77/virft-datasets-67bc271b6f2833eccc0651df">Huggingface</a>.
 - 🚀 [02/25/2025] We release **ViRFT** repository and our training code.
 
 ## 💡 Highlights
-- 🔥 **Multi-Image Visual Alignment Pipeline**: We first design a multi-image visual alignment pipeline MIA-DPO. Our MIA-DPO requires no manual annotations and does not rely on APIs from larger models, offering a significant cost advantage compared to existing visual alignment approaches. 
-- 🔥 **Observation on Multi-Image Hallucinations**: We contribute to the study of different types of multi-image hallucinations and propose to use attention values as an indicator for detecting multi-image hallucinations.
-- 🔥 **Excellent Performance**:  MIA-DPO is agnostic to different LVLM architectures (LLaVA-v1.5 and InternLM-XC2.5, boosts the performance on multiple multi-image benchmarks while maintaining the original single-image understanding capabilities.
+- 🔥 **Visual Reinforcement Fine-tuning (ViRFT)**: We introduce Visual Reinforcement Fine-tuning (**ViRFT**), which extends reinforcement learning with verified rewards on visual perception tasks that are effective with limited data for fine-tuning.
+- 🔥 **Verified Rewards**: We design different **verified rewards** for different visual tasks that enable efficient, high-quality reward computation at a negligible cost. This allows the seamless transfer of DeepSeek R1's style reinforcement learning strategy to the multi-modal domain.
+- 🔥 **Extensive Experiments**: We conduct **extensive experiments** on various visual perception tasks, including fine-grained image classification, open vocabulary object detection, few-shot object detection, and reasoning grounding.
+- 🔥 **Open Source**: We fully **open-source** the training code, training data, and evaluation scripts on Github to facilitate further research.
 
 
 <a href="">
