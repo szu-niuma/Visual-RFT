@@ -142,9 +142,9 @@ python Qwen2_VL_coco_infere.py
 ```
 Please note that some file paths and model paths in ```Qwen2_VL_coco_infere.py``` need to be modified.
 ```
-### line 166-167, change for your model path and model base
-model_path = "./share_models/Qwen2-VL-2B-Instruct/"
-ori_processor_path = "./share_models/Qwen2-VL-2B-Instruct/"
+### line 166-167, change for your model path and model base.
+model_path = "./share_models/Qwen2-VL-2B-Instruct_RL/"  # after RL
+model_base = "./share_models/Qwen2-VL-2B-Instruct/"  # original Qwen2-VL
 ### line 181, change for your coco val annnotation path
 with open('./data/coco/annotations/instances_val2017.json', 'r') as json_file:
 ### line 235-238, selecte the categories you want to evaluation
@@ -167,8 +167,8 @@ python Qwen2_VL_lvis_infere.py
 Please note that some file paths and model paths in ```Qwen2_VL_lvis_infere.py``` need to be modified.
 ```
 ### line 168-169, change for your model path and model base
-model_path = './share_models/Qwen2-VL-2B-Instruct_GRPO_coco_base65cate/'
-ori_processor_path = "./share_models/Qwen2-VL-2B-Instruct/"
+model_path = "./share_models/Qwen2-VL-2B-Instruct_RL/"  # after RL
+model_base = "./share_models/Qwen2-VL-2B-Instruct/"  # original Qwen2-VL
 ### line 184, change for your lvis val annnotation path
 with open('./data/lvis/annotations/lvis_v1_val.json', 'r') as json_file:
 ### line 239-242, selecte the categories you want to evaluation
@@ -189,8 +189,8 @@ python Qwen2_VL_classification_infere.py
 Please note that the model paths in ```Qwen2_VL_classification_infere.py``` need to be modified.
 ```
 ### line 61-63, change for your model path and model base
-model_path = "./share_models/Qwen2-VL-2B-Instruct_GRPO_aircraft100_16shot"
-ori_processor_path = "./share_models/Qwen2-VL-2B-Instruct/"
+model_path = "./share_models/Qwen2-VL-2B-Instruct_RL/"  # after RL
+model_base = "./share_models/Qwen2-VL-2B-Instruct/"  # original Qwen2-VL
 ```
 Inference and result computation are performed simultaneously. After the program finishes running, the number of correctly classified items will be displayed in the command line, and the accuracy is obtained by dividing it by the length of the validation set. (Flower102: 2463, Pets37: 3669, stanford cars: 8041, fgvc-aircraft: 3333)
 
