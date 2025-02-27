@@ -163,8 +163,8 @@ def remove_duplicates(bbox_list):
     return unique_bboxes
 
 ### model path and model base
-model_path = "./share_models/Qwen2-VL-2B-Instruct/"
-ori_processor_path = "./share_models/Qwen2-VL-2B-Instruct/"
+model_path = "./share_models/Qwen2-VL-2B-Instruct_RL/"  # after RL
+model_base = "./share_models/Qwen2-VL-2B-Instruct/"  # original Qwen2-VL
 
 def run(rank, world_size):
     model = Qwen2VLForConditionalGeneration.from_pretrained(
