@@ -195,13 +195,8 @@ model_base = "./share_models/Qwen2-VL-2B-Instruct/"  # original Qwen2-VL
 Inference and result computation are performed simultaneously. After the program finishes running, the number of correctly classified items will be displayed in the command line, and the accuracy is obtained by dividing it by the length of the validation set. (Flower102: 2463, Pets37: 3669, stanford cars: 8041, fgvc-aircraft: 3333)
 
 ### Evaluation Results
-The table below shows the test results of the model trained on the **ViRFT_COCO_base65** dataset, evaluated on 15 new classes from the COCO dataset and 13 rare classes from the LVIS dataset. *We have also conducted **additional experiments**; please refer to our paper for further details*.
-<a href="">
-  <img src="assets/coco_ov.png" alt="Logo" >
-</a>
-<a href="">
-  <img src="assets/lvis_ov.png" alt="Logo" >
-</a>
+*We have conducted **extensive experiments**; please refer to our paper for further details*.
+
 
 ### Case Study
 In the following figure, we present some inference examples from **ViRFT**. We observe that the thinking process significantly enhances the reasoning and grounding ability with **ViRFT**. Through **ViRFT**, Qwen2-VL learns to think critically and carefully examine the image to produce accurate grounding results.
