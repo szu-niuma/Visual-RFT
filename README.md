@@ -1,6 +1,6 @@
 <p align="center">
   <h1 align="center"><img src="assets/logo.png" width="256"></h1>
-  <h1 align="center">ViRFT: Visual Reinforcement Fine-tuning in Large Vision Language Models</h1>
+  <h1 align="center">Visual-RFT: Visual Reinforcement Fine-Tuning</h1>
     <p align="center">
     <a href="https://github.com/Liuziyu77"><strong>Ziyu Liu*</strong></a>
     ·
@@ -28,7 +28,7 @@
 <div align="center"></div>
 <p align="center">
   <p>
-🌈We introduce <strong>Visual Reinforcement Fine-tuning (ViRFT)</strong>, the first comprehensive adaptation of <strong>Deepseek-R1's RL strategy</strong> to the <strong>multimodal field</strong>. We use the Qwen2-VL-2/7B model as our base model and design a <strong>rule-based verifiable reward</strong>, which is integrated into a <strong>GRPO-based reinforcement fine-tuning framework</strong> to enhance the performance of LVLMs across various visual perception tasks. <strong>ViRFT</strong> extends R1's reasoning capabilities to multiple visual perception tasks, including various detection tasks like <strong>Open Vocabulary Detection, Few-shot Detection, Reasoning Grounding, and Fine-grained Image Classification</strong>.
+🌈We introduce <strong>Visual Reinforcement Fine-tuning (Visual-RFT)</strong>, the first comprehensive adaptation of <strong>Deepseek-R1's RL strategy</strong> to the <strong>multimodal field</strong>. We use the Qwen2-VL-2/7B model as our base model and design a <strong>rule-based verifiable reward</strong>, which is integrated into a <strong>GRPO-based reinforcement fine-tuning framework</strong> to enhance the performance of LVLMs across various visual perception tasks. <strong>ViRFT</strong> extends R1's reasoning capabilities to multiple visual perception tasks, including various detection tasks like <strong>Open Vocabulary Detection, Few-shot Detection, Reasoning Grounding, and Fine-grained Image Classification</strong>.
   </p>
 <!--     <a href="">
       <img src="assets/teaser.png" alt="Logo" width="100%"> 
@@ -40,12 +40,12 @@
 </a>
 
 ## 📢 News
-- 🚀 [02/26/2025] We release our paper.
-- 🚀 [02/25/2025] We upload our training datasets to <a href="https://huggingface.co/collections/laolao77/virft-datasets-67bc271b6f2833eccc0651df">Huggingface</a>.
-- 🚀 [02/25/2025] We release **ViRFT** repository and our training code.
+- 🚀 [02/28/2025] We release our paper.
+- 🚀 [02/28/2025] We upload our training datasets to <a href="https://huggingface.co/collections/laolao77/virft-datasets-67bc271b6f2833eccc0651df">Huggingface</a>.
+- 🚀 [02/28/2025] We release **ViRFT** repository and our training code.
 
 ## 💡 Highlights
-- 🔥 **Visual Reinforcement Fine-tuning (ViRFT)**: We introduce Visual Reinforcement Fine-tuning (**ViRFT**), which extends reinforcement learning with verified rewards on visual perception tasks that are effective with limited data for fine-tuning.
+- 🔥 **Visual Reinforcement Fine-tuning (Visual-RFT)**: We introduce Visual Reinforcement Fine-tuning (**Visual-RFT**), which extends reinforcement learning with verified rewards on visual perception tasks that are effective with limited data for fine-tuning.
 - 🔥 **Verified Rewards**: We design different **verified rewards** for different visual tasks that enable efficient, high-quality reward computation at a negligible cost. This allows the seamless transfer of DeepSeek R1's style reinforcement learning strategy to the multi-modal domain.
 - 🔥 **Extensive Experiments**: We conduct **extensive experiments** on various visual perception tasks, including fine-grained image classification, open vocabulary object detection, few-shot object detection, and reasoning grounding.
 - 🔥 **Open Source**: We fully **open-source** the training code, training data, and evaluation scripts on Github to facilitate further research.
@@ -57,7 +57,7 @@
 
 
 ## Framework
-**ViRFT** framework is shown below. The policy model generates a group of responses based on the input. Each response is passed through a verifiable reward function to compute the reward. After group computation of the rewards for each output, the quality of each response is evaluated and used to update the policy model. To ensure the stability of the policy model training, **ViRFT** use KL divergence to limit the difference between the policy model and the reference model. For ***more implementation details***, including data generation, the design of the ***verifiable reward***, and other aspects, please refer to our paper.
+**Visual-RFT** framework is shown below. The policy model generates a group of responses based on the input. Each response is passed through a verifiable reward function to compute the reward. After group computation of the rewards for each output, the quality of each response is evaluated and used to update the policy model. To ensure the stability of the policy model training, **Visual-RFT** use KL divergence to limit the difference between the policy model and the reference model. For ***more implementation details***, including data generation, the design of the ***verifiable reward***, and other aspects, please refer to our paper.
 
 <a href="">
   <img src="assets/framework.png" alt="Logo" >
@@ -65,9 +65,9 @@
 
 ## 🛠️ Setup
 ```
-git clone https://github.com/Liuziyu77/ViRFT.git
-conda create -n ViRFT python=3.10
-conda activate ViRFT
+git clone https://github.com/Liuziyu77/Visual-RFT.git
+conda create -n Visual-RFT python=3.10
+conda activate Visual-RFT
 bash setup.sh
 ```
 ## Training
