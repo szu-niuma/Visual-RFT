@@ -85,64 +85,49 @@ def extract_bbox(response):
     return bbox_list
 
 def calculate_iou(bbox1, bbox2):
-    # 获取两个bbox的坐标
     x1, y1, x2, y2 = bbox1
     x1_2, y1_2, x2_2, y2_2 = bbox2
-    
-    # 计算交集区域的左上角和右下角
+
     xi1 = max(x1, x1_2)
     yi1 = max(y1, y1_2)
     xi2 = min(x2, x2_2)
     yi2 = min(y2, y2_2)
     
-    # 如果没有交集，返回0
     if xi2 <= xi1 or yi2 <= yi1:
         return 0.0
     
-    # 计算交集区域的面积
     intersection_area = (xi2 - xi1) * (yi2 - yi1)
     
-    # 计算两个bbox的面积
     area1 = (x2 - x1) * (y2 - y1)
     area2 = (x2_2 - x1_2) * (y2_2 - y1_2)
-    
-    # 计算并集区域的面积
+
     union_area = area1 + area2 - intersection_area
     
-    # 计算IoU
     iou = intersection_area / union_area
     return iou
 
 def sort_and_calculate_iou(list1, list2, iou_threshold=0.5):
-    # 按照confidence从大到小排序
     list2_sorted = sorted(list2, key=lambda x: x['Confidence'], reverse=True)
     
-    # 用于存储IoU结果
     iou_results = []
     
-    # 用于存储匹配后的bbox
-    matched_list1_indices = set()  # 记录已经匹配的list1的index
+    matched_list1_indices = set()
 
-    # 遍历排序后的list2中的每个bbox
     for bbox2 in list2_sorted:
         max_iou = 0
-        matched_bbox1 = -1  # 当前list2中的bbox与哪个list1中的bbox匹配
+        matched_bbox1 = -1
         best_iou = 0
-        
-        # 对每个未匹配的list1中的bbox进行匹配
         for i, bbox1 in enumerate(list1):
-            if i not in matched_list1_indices:  # 确保list1中该bbox没有被匹配过
+            if i not in matched_list1_indices:
                 iou = calculate_iou(bbox1['Position'], bbox2['Position'])
                 if iou > best_iou:
                     best_iou = iou
                     matched_bbox1 = i
-        
-        # 如果找到了最佳匹配（IoU大于阈值）
+
         if best_iou > iou_threshold:
-            iou_results.append((best_iou, bbox2['Confidence']))  # 记录IoU和confidence
-            matched_list1_indices.add(matched_bbox1)  # 标记list1中的bbox为已匹配
+            iou_results.append((best_iou, bbox2['Confidence']))
+            matched_list1_indices.add(matched_bbox1)
         else:
-            # 如果没有找到匹配的bbox，IoU为0
             iou_results.append((0, bbox2['Confidence']))
     
     ### [(0.7192676547515258, 1.0), (0, 0.7)]
@@ -162,23 +147,7 @@ def remove_duplicates(bbox_list):
     
     return unique_bboxes
 
-### 老版本的 reward 计算方法
-def compute_reward(iou_results):
-    reward = 0.0
-    for i in range(len(iou_results)):
-        temp_iou = iou_results[i][0]
-        temp_confidence = iou_results[i][1]
-
-        if temp_iou!=0: ### 匹配成功
-            total_reward = (temp_iou + (temp_iou + temp_confidence - 1) ** 2)/2
-        elif temp_iou==0: ### 匹配失败
-            total_reward = 0
-        reward += total_reward
-        
-    reward = reward/len(iou_results)
-    return reward
-
-### 新版本的 reward 计算方法
+# V1
 def compute_reward_iou(iou_results):
     iou_reward = 0.0
     confidence_reward = 0.0
@@ -199,7 +168,7 @@ def compute_reward_iou(iou_results):
     confidence_reward = confidence_reward/len(iou_results)
     return iou_reward
 
-### 新版本的 reward 计算方法 ，改进IoU reward计算
+# V2
 def compute_reward_iou_v2(iou_results, len_gt):
     iou_reward = 0.0
     confidence_reward = 0.0
@@ -266,19 +235,6 @@ def accuracy_reward_iou(completions, solution, **kwargs):
         if reward == 0.0:
             try:
                 show_flage = 1
-                ##########################################
-                # # Extract answer from solution if it has think/answer tags
-                # sol_match = re.search(r'<answer>(.*?)</answer>', sol)
-                # ground_truth = sol_match.group(1).strip() if sol_match else sol.strip()
-                
-                # # Extract answer from content if it has think/answer tags
-                # content_match = re.search(r'<answer>(.*?)</answer>', content)
-                # student_answer = content_match.group(1).strip() if content_match else content.strip()
-                
-                # # Compare the extracted answers
-                # if student_answer == ground_truth:
-                #     reward = 1.0
-                ##########################################
                 # Extract answer from solution if it has think/answer tags
                 ground_truth = sol.strip()
                 # Extract answer from content if it has think/answer tags
@@ -286,35 +242,23 @@ def accuracy_reward_iou(completions, solution, **kwargs):
                 student_answer = content_match.group(1).strip() if content_match else content.strip()
                 student_answer = '<answer>'+student_answer+'</answer>'
 
-                ### 获得bbox和confidence
-                student_answer = student_answer.replace("[[",'[')  ### 修正student_answer中的格式错误
-                student_answer = student_answer.replace("]]",']')  ### 修正student_answer中的格式错误
-                student_answer = student_answer.replace("\n",'')  ### 修正student_answer中的格式错误
-                ### [{'Position': [254, 303, 291, 365], 'Confidence': 0.9}, {'Position': [100, 100, 200, 200], 'Confidence': 0.8}]
+                # fix format error
+                student_answer = student_answer.replace("[[",'[')  
+                student_answer = student_answer.replace("]]",']')  
+                student_answer = student_answer.replace("\n",'')  
+                # [{'Position': [254, 303, 291, 365], 'Confidence': 0.9}, {'Position': [100, 100, 200, 200], 'Confidence': 0.8}]
+                ground_truth_bbox = extract_bbox(ground_truth)
+                student_answer_bbox = extract_bbox(student_answer)
                 # pdb.set_trace()
-                ground_truth_bbox = extract_bbox(ground_truth)   ### 提取bbox和confidence
-                student_answer_bbox = extract_bbox(student_answer)  ### 提取bbox和confidence
-                # pdb.set_trace()
-                if student_answer_bbox==None or type(student_answer_bbox[0])!=dict:  ### 没有提取出正确的bbox
+                if student_answer_bbox==None or type(student_answer_bbox[0])!=dict:
                     reward = 0.0
                 else:
-                    # import pdb; pdb.set_trace()
-                    student_answer_bbox = remove_duplicates(student_answer_bbox)   ### 模型有时候会复读，去除重复的bbox
-                    # pdb.set_trace()
-                    # 计算IoU，如果bbox数量不同，取最小的bbox数量
+                    student_answer_bbox = remove_duplicates(student_answer_bbox)   # remove duplicates
                     iou_results = sort_and_calculate_iou(ground_truth_bbox, student_answer_bbox)
-                    # pdb.set_trace()
-                    ### v1 所有预测的bbox的IoU的和除以预测的bbox的数量，可能导致模型喜欢只出一个bbox
-                    # reward = compute_reward_iou(iou_results)
-                    ### v2 所有预测的bbox的IoU的和除以ground truth的bbox的数量
+                    ### new iou reward
                     reward = compute_reward_iou_v2(iou_results, len(ground_truth_bbox))
                     if reward>1:
                         reward = 1.0
-                    # import pdb; pdb.set_trace()
-
-                if 'No Object' in student_answer and 'No Object' in ground_truth:  ### 物体不出现在图片中，需要拒绝回答
-                    reward = 1.0
-                ##########################################
             except Exception:
                 pass  # Keep reward as 0.0 if both methods fail
                 
@@ -359,19 +303,6 @@ def accuracy_reward_confidence(completions, solution, **kwargs):
         if reward == 0.0:
             try:
                 show_flage = 1
-                ##########################################
-                # # Extract answer from solution if it has think/answer tags
-                # sol_match = re.search(r'<answer>(.*?)</answer>', sol)
-                # ground_truth = sol_match.group(1).strip() if sol_match else sol.strip()
-                
-                # # Extract answer from content if it has think/answer tags
-                # content_match = re.search(r'<answer>(.*?)</answer>', content)
-                # student_answer = content_match.group(1).strip() if content_match else content.strip()
-                
-                # # Compare the extracted answers
-                # if student_answer == ground_truth:
-                #     reward = 1.0
-                ##########################################
                 # Extract answer from solution if it has think/answer tags
                 ground_truth = sol.strip()
                 # Extract answer from content if it has think/answer tags
@@ -379,34 +310,24 @@ def accuracy_reward_confidence(completions, solution, **kwargs):
                 student_answer = content_match.group(1).strip() if content_match else content.strip()
                 student_answer = '<answer>'+student_answer+'</answer>'
 
-                ### 获得bbox和confidence
-                student_answer = student_answer.replace("[[",'[')  ### 修正student_answer中的格式错误
-                student_answer = student_answer.replace("]]",']')  ### 修正student_answer中的格式错误
-                student_answer = student_answer.replace("\n",'')  ### 修正student_answer中的格式错误
-                ### [{'Position': [254, 303, 291, 365], 'Confidence': 0.9}, {'Position': [100, 100, 200, 200], 'Confidence': 0.8}]
+                # fix format error
+                student_answer = student_answer.replace("[[",'[')
+                student_answer = student_answer.replace("]]",']')
+                student_answer = student_answer.replace("\n",'')
+                # [{'Position': [254, 303, 291, 365], 'Confidence': 0.9}, {'Position': [100, 100, 200, 200], 'Confidence': 0.8}]
+                ground_truth_bbox = extract_bbox(ground_truth)
+                student_answer_bbox = extract_bbox(student_answer)
                 # pdb.set_trace()
-                ground_truth_bbox = extract_bbox(ground_truth)   ### 提取bbox和confidence
-                student_answer_bbox = extract_bbox(student_answer)  ### 提取bbox和confidence
-                # pdb.set_trace()
-                if student_answer_bbox==None or type(student_answer_bbox[0])!=dict:  ### 没有提取出正确的bbox
+                if student_answer_bbox==None or type(student_answer_bbox[0])!=dict:  # wrong bbox
                     reward = 0.0
                 else:
-                    # import pdb; pdb.set_trace()
-                    student_answer_bbox = remove_duplicates(student_answer_bbox)   ### 模型有时候会复读，去除重复的bbox
-                    # pdb.set_trace()
-                    # 计算IoU，如果bbox数量不同，取最小的bbox数量
+                    student_answer_bbox = remove_duplicates(student_answer_bbox)   # remove duplicates
                     iou_results = sort_and_calculate_iou(ground_truth_bbox, student_answer_bbox)
-                    # pdb.set_trace()
                     reward = compute_reward_confidence(iou_results)
                     if reward>1:
                         reward = 1.0
                     if reward<0:
                         reward = 0.0
-                    # import pdb; pdb.set_trace()
-
-                if 'No Object' in student_answer and 'No Object' in ground_truth:  ### 物体不出现在图片中，需要拒绝回答
-                    reward = 1.0
-                ##########################################
             except Exception:
                 pass  # Keep reward as 0.0 if both methods fail
                 
@@ -437,13 +358,7 @@ def format_reward(completions, **kwargs):
     matches = [re.fullmatch(pattern, content, re.DOTALL) for content in completion_contents]
     return [1.0 if match else 0.0 for match in matches]
 
-# ### 老的 reward registry，分为两部分
-# reward_funcs_registry = {
-#     "accuracy": accuracy_reward,
-#     "format": format_reward,
-# }
-
-### 新的 reward registry，分为三部分
+###  reward registry three parts
 reward_funcs_registry = {
     "accuracy_iou": accuracy_reward_iou,
     "accuracy_confidence": accuracy_reward_confidence,
@@ -460,14 +375,12 @@ SYSTEM_PROMPT = (
 
 def main(script_args, training_args, model_args):
     # Get reward functions
-    # import pdb; pdb.set_trace()
     script_args.reward_funcs = ['accuracy_iou','accuracy_confidence','format']
     reward_funcs = [reward_funcs_registry[func] for func in script_args.reward_funcs]
-    # import pdb; pdb.set_trace()
 
-    # Load the dataset
+    # Load the dataset from huggingface
     # dataset = load_dataset(script_args.dataset_name, name=script_args.dataset_config)
-    ### lzy modified
+    # Load the dataset from local disk
     from datasets import DatasetDict
     dataset = DatasetDict.load_from_disk(script_args.dataset_name)
 
@@ -480,35 +393,6 @@ def main(script_args, training_args, model_args):
                 {"role": "user", "content": example["problem"]},
             ],
         }
-
-    # def make_conversation_image(example):
-    #     return {
-    #         "prompt": [
-    #             {"role": "system", "content": [{"type": "text", "text": SYSTEM_PROMPT}]},
-    #             {
-    #                 "role": "user",
-    #                 "content": [
-    #                     {"type": "image"},
-    #                     {"type": "text", "text": example["problem"]},
-    #                 ],
-    #             },
-    #         ],
-    #     }
-
-    # QUESTION_TEMPLATE = "{Question}  Output the thinking process in <think> </think> and final answer (number) in <answer> </answer> tags."
-
-    # def make_conversation_image(example):
-    #     return {
-    #         "prompt": [
-    #             {
-    #                 "role": "user",
-    #                 "content": [
-    #                     {"type": "image"},
-    #                     {"type": "text", "text": QUESTION_TEMPLATE.format(Question=example["problem"])},
-    #                 ],
-    #             },
-    #         ],
-    #     }
 
     def make_conversation_image(example):
         return {
