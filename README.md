@@ -10,8 +10,6 @@
     ·
     <a href="https://lightdxy.github.io/"><strong>Xiaoyi Dong</strong></a>
     ·
-    <a href="https://panzhang0212.github.io/"><strong>Pan Zhang</strong></a>
-    ·
     <a href="https://scholar.google.com/citations?user=sJkqsqkAAAAJ"><strong>Yuhang Cao</strong></a>
     ·
     <a href="https://kennymckormick.github.io/"><strong>Haodong Duan</strong></a>
@@ -40,9 +38,9 @@
 </a>
 
 ## 📢 News
-- 🚀 [02/28/2025] We release our paper.
-- 🚀 [02/28/2025] We upload our training datasets to <a href="https://huggingface.co/collections/laolao77/virft-datasets-67bc271b6f2833eccc0651df">Huggingface</a>.
-- 🚀 [02/28/2025] We release **ViRFT** repository and our training code.
+- 🚀 [03/04/2025] We release our paper.
+- 🚀 [03/04/2025] We upload our training datasets to <a href="https://huggingface.co/collections/laolao77/virft-datasets-67bc271b6f2833eccc0651df">Huggingface</a>.
+- 🚀 [03/04/2025] We release **ViRFT** repository and our training code.
 
 ## 💡 Highlights
 - 🔥 **Visual Reinforcement Fine-tuning (Visual-RFT)**: We introduce Visual Reinforcement Fine-tuning (**Visual-RFT**), which extends reinforcement learning with verified rewards on visual perception tasks that are effective with limited data for fine-tuning.
