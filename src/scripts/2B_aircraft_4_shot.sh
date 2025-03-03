@@ -1,17 +1,17 @@
-#!/bin/bash
-set -x
-wandb login
+export DEBUG_MODE="true"
+export LOG_PATH="./debug_log_2b_GRPO_aircraft_4_shot.txt"
 
-
-export DATA_PATH=./share_data/aircraft100_4shot
+export DATA_PATH=./share_data/base65cate_6k_think
 export CKPT_PATH=./share_models/Qwen2-VL-2B-Instruct
-export SAVE_PATH=./share_models/Qwen2-VL-2B-Instruct_GRPO_aircraft100_4shot_8gpu
-
-export DEBUG_MODE="true" # Enable Debug if you want to see the rollout of model during RL
-export LOG_PATH="./debug_log_2b_GRPO_aircraft100_4shot.txt"
+export SAVE_PATH=./share_models/Qwen2-VL-2B-Instruct_GRPO_coco_base65cate_6k
 
 
-torchrun --nnodes $NNODES --nproc_per_node $GPUS_PER_NODE --node_rank $SLURM_NODEID --master_addr $(scontrol show hostname $SLURM_NODELIST | head -n1) --master_port ${MASTER_PORT} /mnt/petrelfs/liuziyu/R1-Grounding/R1-V/src/open-r1-multimodal/src/open_r1/grpo_classification.py \
+torchrun --nproc_per_node="8" \
+    --nnodes="1" \
+    --node_rank="0" \
+    --master_addr="127.0.0.1" \
+    --master_port="12345" \
+    /src/open_r1/grpo_classification.py \
     --output_dir ${SAVE_PATH}  \
     --model_name_or_path ${CKPT_PATH} \
     --dataset_name ${DATA_PATH} \
