@@ -1,9 +1,9 @@
 export DEBUG_MODE="true"
 export LOG_PATH="./debug_log_2b_GRPO_aircraft_4_shot.txt"
 
-export DATA_PATH=./share_data/base65cate_6k_think
+export DATA_PATH=./share_data/ViRFT_CLS_fgvc_aircraft_4_shot
 export CKPT_PATH=./share_models/Qwen2-VL-2B-Instruct
-export SAVE_PATH=./share_models/Qwen2-VL-2B-Instruct_GRPO_coco_base65cate_6k
+export SAVE_PATH=./share_models/Qwen2-VL-2B-Instruct_GRPO_aircraft_4_shot
 
 
 torchrun --nproc_per_node="8" \
@@ -25,7 +25,7 @@ torchrun --nproc_per_node="8" \
     --gradient_checkpointing false \
     --attn_implementation flash_attention_2 \
     --max_pixels 401408 \
-    --num_train_epochs 40 \
+    --num_train_epochs 100 \
     --run_name Qwen2-VL-2B_GRPO_aircraft100_4shot \
     --save_steps 100 \
     --save_only_model true \
