@@ -1,5 +1,4 @@
-# Install the packages in r1-v .
-cd src/virft 
+cd src/virft
 pip install -e ".[dev]"
 
 # Addtional modules
