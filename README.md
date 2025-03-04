@@ -14,8 +14,6 @@
     ·
     <a href="https://kennymckormick.github.io/"><strong>Haodong Duan</strong></a>
     ·
-     <a href="http://yjxiong.me/"><strong>Yuanjun Xiong</strong></a>
-    ·
      <a href="http://dahua.site/"><strong>Dahua Lin</strong></a>
     ·
      <a href="https://myownskyw7.github.io/"><strong>Jiaqi Wang</strong></a>
