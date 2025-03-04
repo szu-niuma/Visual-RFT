@@ -14,17 +14,15 @@ from transformers.generation import GenerationConfig
 from peft import AutoPeftModelForCausalLM
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
-torch.manual_seed(1234)
 
 from transformers import Qwen2VLForConditionalGeneration, AutoTokenizer, AutoProcessor
 from qwen_vl_utils import process_vision_info
+import os
 
-# 定义颜色的ANSI代码
 RED = '\033[91m'
 GREEN = '\033[92m'
 YELLOW = '\033[93m'
-RESET = '\033[0m'  # 重置颜色
-
+RESET = '\033[0m'
 
 import logging
 logging.basicConfig()
@@ -161,13 +159,15 @@ def remove_duplicates(bbox_list):
         if position_tuple not in seen:
             seen.add(position_tuple)
             unique_bboxes.append(bbox)
-    
+
     return unique_bboxes
 
 ### model path and model base
-model_path = "./share_models/Qwen2-VL-2B-Instruct_RL/"  # after RL
-model_base = "./share_models/Qwen2-VL-2B-Instruct/"  # original Qwen2-VL
+# model_path = "./share_models/Qwen2-VL-2B-Instruct/"
+# ori_processor_path = "./share_models/Qwen2-VL-2B-Instruct/"
 
+model_path = './share_models/Qwen2-VL-2B-Instruct_GRPO_model/checkpoint-200'
+ori_processor_path = "./share_models/Qwen2-VL-2B-Instruct/"
 
 def run(rank, world_size):
     model = Qwen2VLForConditionalGeneration.from_pretrained(
@@ -214,35 +214,33 @@ def run(rank, world_size):
     error_count = 0
     bbox_count = 0
     pred_results = []
+    if '2B' in model_path:
+        exist_cat = json.load(open("./exist_map_lvis_Qwen2_vl_2B_baseline.json", 'r'))
+    elif '7B' in model_path:
+        exist_cat = json.load(open("./exist_map_lvis_Qwen2_vl_7B_baseline.json", 'r'))
+        
     for image in tqdm(split_images): 
         image_id = image['id']
         image_height = image['height']
         image_width = image['width']
         image_coco_url = image['coco_url']
         parts = image_coco_url.split("/")
-        image_path = '/mnt/hwfile/mllm/wangjiaqi/data/lvis/' + "/".join(parts[-2:])
+        image_path = './data/lvis/' + "/".join(parts[-2:])   ### Modify according to your own image path.
 
-        ### Get the class names appearing in this image.
-        annotations = [annotation for annotation in instances_val['annotations'] if annotation['image_id'] == image_id]
-        exist_cate_ids = []
-        for annotation in annotations:
-            if annotation['category_id'] not in exist_cate_ids:
-                exist_cate_ids.append(annotation['category_id'])
-        exist_cate_names = []
-        for exist_cate_id in exist_cate_ids:
-            exist_cate_names.append(category_ids_2_categoty[exist_cate_id])
-        
         ### Traverse all class in image.
-        for cate in exist_cate_names:
+        for cate in exist_cat[str(image_id)]:
             category = cate
 
             ### few-shot experiment: 6 classes
             # selected_cate = ['horse_buggy', 'die', 'kitchen_table', 'omelet', 'papaya', 'stepladder']
-            ## open vocabulary experiment:  13 classes
+            # if category not in selected_cate:
+            #       continue
+            
+            ### open vocabulary experiment:  13 classes
             selected_cate = ['casserole', 'die', 'egg_roll', 'futon', 'garbage', 'handsaw', 'hippopotamus', 'kitchen_table', 'mallet', 'omelet', 'shot_glass', 'stepladder', 'sugar_bowl']
             if category not in selected_cate:
                 continue
-                
+
             category_id = category_2_categoty_ids[category]
 
             question = (
@@ -290,6 +288,7 @@ def run(rank, world_size):
                 generated_ids_trimmed, skip_special_tokens=True, clean_up_tokenization_spaces=False
             )
             response = response[0]
+            logger.info(response)
             # Fix possible formatting errors in the response.
             response = response.replace("[[",'[')
             response = response.replace("]]",']')
@@ -344,7 +343,7 @@ def main():
             
         logger.info('Error number: ' + str(global_count_error))  
         ### save path
-        with open(f'prediction_Qwen2_vl_2B_GRPO_coco_base65cate_lvis_ov.json', 'w') as json_file:
+        with open('prediction_results.json', 'w') as json_file:
             json.dump(global_results, json_file)
         logger.info("Done")
         logger.info('finished running')
@@ -352,4 +351,4 @@ def main():
         logger.info("Not enough GPUs")
 
 if __name__ == "__main__":
-    main()                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+    main()
