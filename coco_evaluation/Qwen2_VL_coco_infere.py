@@ -212,13 +212,16 @@ def run(rank, world_size):
     error_count = 0
     bbox_count = 0
     pred_results = []
-    with open('./exist_map_coco_Qwen2_vl_7B_baseline.json', 'r') as f:
-        exist_cat = json.load(f)
+    if '2B' in model_path:
+        exist_cat = json.load(open("./exist_map_coco_Qwen2_vl_2B_baseline.json", 'r'))
+    elif '7B' in model_path:
+        exist_cat = json.load(open("./exist_map_coco_Qwen2_vl_7B_baseline.json", 'r'))
+      
     for image in tqdm(split_images): 
         image_id = image['id']
         image_height = image['height']
         image_width = image['width']
-        image_path = './data/coco/val2017/'+image['file_name']
+        image_path = './data/coco/val2017/'+image['file_name']    ### Modify according to your own image path.
 
         ### Traverse all class in image.
         for cate in exist_cat[str(image_id)]:
@@ -233,9 +236,9 @@ def run(rank, world_size):
             #     continue
           
             ### open vocabulary experiment:  15 new classes
-            # selected_cate = ['mouse', 'fork', 'hot dog', 'cat', 'airplane', 'suitcase', 'parking meter', 'sandwich', 'train', 'hair drier', 'toilet', 'toaster', 'snowboard', 'frisbee', 'bear']
-            # if category not in selected_cate:
-            #     continue
+            selected_cate = ['mouse', 'fork', 'hot dog', 'cat', 'airplane', 'suitcase', 'parking meter', 'sandwich', 'train', 'hair drier', 'toilet', 'toaster', 'snowboard', 'frisbee', 'bear']
+            if category not in selected_cate:
+                continue
 
             category_id = category_2_categoty_ids[category]
             
