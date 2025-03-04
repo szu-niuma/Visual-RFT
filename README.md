@@ -1,5 +1,5 @@
 <p align="center">
-  <h1 align="center"><img src="assets/logo.png" width="256"></h1>
+<!--   <h1 align="center"><img src="assets/logo.png" width="256"></h1> -->
   <h1 align="center">Visual-RFT: Visual Reinforcement Fine-Tuning</h1>
     <p align="center">
     <a href="https://github.com/Liuziyu77"><strong>Ziyu Liu*</strong></a>
@@ -111,7 +111,7 @@ torchrun --nproc_per_node="8" \
     --gradient_checkpointing false \
     --attn_implementation flash_attention_2 \
     --max_pixels 401408 \
-    --num_train_epochs 2 \
+    --num_train_epochs 10 \
     --run_name Qwen2-VL-2B_GRPO_coco_base65cate_6k \
     --save_steps 100 \
     --save_only_model true \
@@ -140,15 +140,17 @@ python Qwen2_VL_coco_infere.py
 ```
 Please note that some file paths and model paths in ```Qwen2_VL_coco_infere.py``` need to be modified.
 ```
-### line 166-167, change for your model path and model base.
-model_path = "./share_models/Qwen2-VL-2B-Instruct_RL/"  # after RL
-model_base = "./share_models/Qwen2-VL-2B-Instruct/"  # original Qwen2-VL
-### line 181, change for your coco val annnotation path
+### line 167-168, change for your model path and model base.
+model_path = "./share_models/Qwen2-VL-2B-Instruct_RL/"  # RL model
+model_base = "./share_models/Qwen2-VL-2B-Instruct/"  # original Qwen2-VL model
+### line 182, change for your coco val annnotation path
 with open('./data/coco/annotations/instances_val2017.json', 'r') as json_file:
-### line 235-238, selecte the categories you want to evaluation
+### line 224, Modify according to your own image path.
+image_path = './data/coco/val2017/'+image['file_name']    
+### line 231-241, selecte the categories you want to evaluation
 selected_cate = ['bus', 'train', 'fire hydrant', 'stop sign', 'cat', 'dog', 'bed', 'toilet']
-### line 384, results save path
-with open(f'prediction_Qwen2_vl_2B_baseline.json', 'w') as json_file:
+### line 350, results save path
+with open(f'prediction_results.json', 'w') as json_file:
 ```
 The inference results will be saved in `JSON` format and later used for evaluation.
 
@@ -164,15 +166,17 @@ python Qwen2_VL_lvis_infere.py
 ```
 Please note that some file paths and model paths in ```Qwen2_VL_lvis_infere.py``` need to be modified.
 ```
-### line 168-169, change for your model path and model base
-model_path = "./share_models/Qwen2-VL-2B-Instruct_RL/"  # after RL
-model_base = "./share_models/Qwen2-VL-2B-Instruct/"  # original Qwen2-VL
+### line 169-170, change for your model path and model base
+model_path = "./share_models/Qwen2-VL-2B-Instruct_RL/"  # RL model
+model_base = "./share_models/Qwen2-VL-2B-Instruct/"  # original Qwen2-VL model
 ### line 184, change for your lvis val annnotation path
 with open('./data/lvis/annotations/lvis_v1_val.json', 'r') as json_file:
-### line 239-242, selecte the categories you want to evaluation
+### line 228, Modify according to your own image path.
+image_path = './data/lvis/' + "/".join(parts[-2:])   
+### line 234-242, selecte the categories you want to evaluation
 selected_cate = ['horse_buggy', 'die', 'kitchen_table', 'omelet', 'papaya', 'stepladder']
-### line 347, results save path
-with open(f'prediction_Qwen2_vl_2B_GRPO_coco_base65cate_lvis_ov.json', 'w') as json_file:
+### line 346, results save path
+with open(f'prediction_results.json', 'w') as json_file:
 ```
 The inference results will be saved in `JSON` format and later used for evaluation.
 
