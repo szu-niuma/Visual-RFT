@@ -25,7 +25,7 @@ torchrun --nproc_per_node="8" \
     --gradient_checkpointing false \
     --attn_implementation flash_attention_2 \
     --max_pixels 401408 \
-    --num_train_epochs 100 \
+    --num_train_epochs 1 \
     --run_name Qwen2-VL-2B_GRPO_aircraft100_4shot \
     --save_steps 100 \
     --save_only_model true \
