@@ -83,6 +83,7 @@ To train on our various visual perception tasks, first visit <a href="https://hu
 | LISA dataset | Grounding | - | Reasoning Grounding|
 ### GRPO
 After downloading the dataset, you can start training using the following example bash script. Our bash scripts are in ```/src/scripts```
+> 🔔 There's no need for prolonged training. For a dataset with only a few hundred samples, 200 steps should be sufficient.
 ```
 export DEBUG_MODE="true"
 export LOG_PATH="./debug_log_2b_GRPO_coco_base65cate_6k.txt"
