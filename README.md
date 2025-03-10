@@ -215,12 +215,7 @@ We also present some inference cases of the model when handling *fine-grained cl
 
 ## ✒️Citation
 ```
-@inproceedings{Liu2025VisualRFTVR,
-  title={Visual-RFT: Visual Reinforcement Fine-Tuning},
-  author={Ziyu Liu and Zeyi Sun and Yuhang Zang and Xiao-wen Dong and Yuhang Cao and Haodong Duan and Dahua Lin and Jiaqi Wang},
-  year={2025},
-  url={https://api.semanticscholar.org/CorpusID:276768091}
-}
+TBD
 ```
 
 ## 📄 License
