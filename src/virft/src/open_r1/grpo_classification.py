@@ -22,11 +22,13 @@ from datasets import load_dataset, load_from_disk
 from transformers import Qwen2VLForConditionalGeneration
 
 from math_verify import parse, verify
+
 # from open_r1.trainer import Qwen2VLGRPOTrainer
 from open_r1.trainer import Qwen2VLGRPOTrainer, Qwen2VLGRPOVLLMTrainer
 from trl import GRPOConfig, GRPOTrainer, ModelConfig, ScriptArguments, TrlParser, get_peft_config
 
 import json
+
 
 @dataclass
 class GRPOScriptArguments(ScriptArguments):
@@ -61,32 +63,35 @@ def accuracy_reward(completions, solution, **kwargs):
         reward = 0.0
         # Try symbolic verification first
         try:
+            # 从字符串中解析出数学表达式
             answer = parse(content)
+            # 验证生成的答案是否正确
             if float(verify(answer, parse(sol))) > 0:
                 reward = 1.0
         except Exception:
             pass  # Continue to next verification method if this fails
 
         # If symbolic verification failed, try string matching
+        # 标准答案包含在生成答案中，或生成答案包含在标准答案中，奖励值为1.0 否则奖励值为0.0(部分匹配机制)
         if reward == 0.0:
             try:
                 # Extract answer from solution if it has think/answer tags
-                sol_match = re.search(r'<answer>(.*?)</answer>', sol)
+                sol_match = re.search(r"<answer>(.*?)</answer>", sol)
                 ground_truth = sol_match.group(1).strip() if sol_match else sol.strip()
-                
+
                 # Extract answer from content if it has think/answer tags
-                content_match = re.search(r'<answer>(.*?)</answer>', content)
+                content_match = re.search(r"<answer>(.*?)</answer>", content)
                 student_answer = content_match.group(1).strip() if content_match else content.strip()
-                
-                ground_truth = ground_truth.replace(' ','').replace('_','').lower()
-                student_answer = student_answer.replace(' ','').replace('_','').lower()
+
+                ground_truth = ground_truth.replace(" ", "").replace("_", "").lower()
+                student_answer = student_answer.replace(" ", "").replace("_", "").lower()
 
                 # Compare the extracted answers
                 if ground_truth in student_answer or student_answer in ground_truth:
                     reward = 1.0
             except Exception:
                 pass  # Keep reward as 0.0 if both methods fail
-                
+
         rewards.append(reward)
         # import pdb; pdb.set_trace()
         if os.getenv("DEBUG_MODE") == "true":
@@ -98,13 +103,18 @@ def accuracy_reward(completions, solution, **kwargs):
                 f.write(f"sol: {sol}\n")
     return rewards
 
+
 def format_reward(completions, **kwargs):
-    """Reward function that checks if the completion has a specific format."""
+    """
+    Reward function that checks if the completion has a specific format.
+    如果completion的格式符合<think>.*?</think>\s*<answer>.*?</answer>，则返回1.0，否则返回0.0
+    """
     pattern = r"<think>.*?</think>\s*<answer>.*?</answer>"
     completion_contents = [completion[0]["content"] for completion in completions]
     # matches = [re.match(pattern, content) for content in completion_contents]
     matches = [re.fullmatch(pattern, content, re.DOTALL) for content in completion_contents]
     return [1.0 if match else 0.0 for match in matches]
+
 
 reward_funcs_registry = {
     "accuracy": accuracy_reward,
@@ -122,16 +132,14 @@ SYSTEM_PROMPT = (
 def main(script_args, training_args, model_args):
     # Get reward functions
     # import pdb; pdb.set_trace()
-    script_args.reward_funcs = ['accuracy','format']
+    script_args.reward_funcs = ["accuracy", "format"]
     reward_funcs = [reward_funcs_registry[func] for func in script_args.reward_funcs]
     # import pdb; pdb.set_trace()
 
     # Load the dataset
     # dataset = load_dataset(script_args.dataset_name, name=script_args.dataset_config)
     ### lzy modified
-    from datasets import DatasetDict
-    dataset = DatasetDict.load_from_disk(script_args.dataset_name)
-
+    dataset = load_dataset(script_args.dataset_name)
 
     # Format into conversation
     def make_conversation(example):
@@ -155,21 +163,17 @@ def main(script_args, training_args, model_args):
             ],
         }
 
-
     if "image" in dataset[script_args.dataset_train_split].features:
         print("has image in dataset")
         dataset = dataset.map(make_conversation_image)  # Utilize multiprocessing for faster mapping
         # dataset = dataset.remove_columns(["original_question", "original_answer"])
-
     else:
         print("no image in dataset")
         dataset = dataset.map(make_conversation)
         dataset = dataset.remove_columns("messages")
 
-    
     trainer_cls = Qwen2VLGRPOTrainer if not training_args.use_vllm else Qwen2VLGRPOVLLMTrainer
     print("using: ", trainer_cls)
-
 
     # Initialize the GRPO trainer
     trainer = trainer_cls(
